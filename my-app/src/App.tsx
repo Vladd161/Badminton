@@ -1,9 +1,5 @@
 import { useState } from 'react'
 
-interface Counter{
-  name: string;
-  count? : 0;
-}
 // "Japheth", "Ludwig", "Syafa", "Lessie", "Vlademir", "Arfa", "Gian", "Robert", "Chris", "Emman"
 function App() {
   const [playerCount, setPlayerCount] = useState(10)
