@@ -241,11 +241,24 @@ function nineMorePlayers(numOfGames:number){
     countListPNames.splice(countNameIndex,1)
     const nameIndex = countListPNames.findIndex((e) => e.name == playerName);
     listPNames.splice(nameIndex,1)
-    alert(countListPNames.length)
     setCountListPNames([...countListPNames]) // this updates the state thus shows the result of the change removing it from the list
     setListPNames([...listPNames]);
   }
 
+  function restPlus(playerName:string){
+    const countName = countListPNames.find((e) => e.name == playerName);
+    countName.count += 1
+    setCountListPNames([...countListPNames])
+  }
+
+  function restMinus(playerName:string){
+    const countName = countListPNames.find((e) => e.name == playerName);
+    countName.count -= 1
+    if(countName.count < 0){
+      countName.count = 0;
+    }
+    setCountListPNames([...countListPNames])
+  }
   return (
     <>
     <label>
@@ -289,8 +302,9 @@ function nineMorePlayers(numOfGames:number){
       <ol>
         {countListPNames.map(countListPNames => (
           <li><button type = "button" onClick = {() => removePlayer(countListPNames.name)}>Remove</button>
-          {countListPNames.name} | Rest:{countListPNames.count} 
-          <button> + </button> 
+          {countListPNames.name} | Rest:{countListPNames.count}                
+          <button type = "button" onClick = {() => restPlus(countListPNames.name)}> + </button> 
+          <button type = "button" onClick = {() => restMinus(countListPNames.name)}> - </button>
           </li> // in button removePlayer have to add () => for it to be a function that accepts parameter 
         ))}
       </ol>
