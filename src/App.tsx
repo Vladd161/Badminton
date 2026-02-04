@@ -160,7 +160,7 @@ function nineMorePlayers(numOfGames:number){
           [shuffleNames[currentIndex], shuffleNames[randomIndex]] = [
             shuffleNames[randomIndex], shuffleNames[currentIndex]];
         }
-        gameSets.push({key: gameNo, court1: shuffleNames.slice(0,2), court2: shuffleNames.slice(2)});
+        gameSets.push({key: gameNo, court1: shuffleNames.slice(0,2), court2: shuffleNames.slice(2), court3:[], rest:[]});
         gameNo+=1;
       }
       setGameSets([...gameSets])
@@ -207,7 +207,7 @@ function nineMorePlayers(numOfGames:number){
           [shuffleNames[currentIndex], shuffleNames[randomIndex]] = [
             shuffleNames[randomIndex], shuffleNames[currentIndex]];
         }
-        gameSets.push({game: gameNo, court1: shuffleNames.slice(0,4), court2: shuffleNames.slice(4), rest: []});
+        gameSets.push({game: gameNo, court1: shuffleNames.slice(0,4), court2: shuffleNames.slice(4), court3:[], rest: []});
         gameNo+=1;
       }
       setGameSets([...gameSets])
@@ -230,11 +230,20 @@ function nineMorePlayers(numOfGames:number){
   function resetRest(){
     alert(countListPNames.length)
     for(let i=0;i < countListPNames.length; i++){
-      alert("happens")
       const name = countListPNames[i];
       name.count = 0;
     }
     setCountListPNames([...countListPNames]); // this updates the state thus shows the result of the change back from 3^ to 0
+  }
+
+  function removePlayer(playerName:string){
+    const countNameIndex = countListPNames.findIndex((e) => e.name == playerName);
+    countListPNames.splice(countNameIndex,1)
+    const nameIndex = countListPNames.findIndex((e) => e.name == playerName);
+    listPNames.splice(nameIndex,1)
+    alert(countListPNames.length)
+    setCountListPNames([...countListPNames]) // this updates the state thus shows the result of the change removing it from the list
+    setListPNames([...listPNames]);
   }
 
   return (
@@ -279,7 +288,10 @@ function nineMorePlayers(numOfGames:number){
     {court} 
       <ol>
         {countListPNames.map(countListPNames => (
-          <li><button>Remove</button>  {countListPNames.name} | Rest:{countListPNames.count} <button> + </button></li>
+          <li><button type = "button" onClick = {() => removePlayer(countListPNames.name)}>Remove</button>
+          {countListPNames.name} | Rest:{countListPNames.count} 
+          <button> + </button> 
+          </li> // in button removePlayer have to add () => for it to be a function that accepts parameter 
         ))}
       </ol>
       <button type = "button" onClick={resetRest}>Reset Rest</button>
