@@ -6,8 +6,8 @@ function App() {
   const [hours, setHours] = useState(3)
   const [court, setCourt] = useState(2)
   const [playerNames, setPlayerNames] = useState('asd, Japheth, Ludwig, Syafa, Lessie, Vlademir, Arfa, Robert, Chris, Justin, Eman');
-  const [listPNames, setListPNames] = useState<string[]>([])
-  const [countListPNames, setCountListPNames] = useState<any[]>([]);
+  const [listPNames, setListPNames] = useState<string[]>([]) // set  of names
+  const [countListPNames, setCountListPNames] = useState<any[]>([]); // list of {name:,count:} object  
   const [gameSets, setGameSets] = useState<any[]>([{game: "", court1: [], court2: [], court3: [], rest:[]}]) 
 
 
@@ -101,7 +101,6 @@ function getLeastRest(){
       restList.push(leastRest[randomIndex])
       const name = countListPNames.find((e) => e.name == leastRest[randomIndex]);
       name.count += 1;
-      alert("weird" + i)
     }
   }
   else{ 
@@ -186,7 +185,7 @@ function nineMorePlayers(numOfGames:number){
           [shuffleNames[currentIndex], shuffleNames[randomIndex]] = [
             shuffleNames[randomIndex], shuffleNames[currentIndex]];
         }
-        gameSets.push({game: gameNo, court1: shuffleNames.slice(0,2), court2: shuffleNames.slice(2,6), rest: shuffleNames.slice(6)});
+        gameSets.push({game: gameNo, court1: shuffleNames.slice(0,2), court2: shuffleNames.slice(2,6), court3: [], rest: shuffleNames.slice(6)});
         gameNo+=1;
       }
       setGameSets([...gameSets])
@@ -226,6 +225,16 @@ function nineMorePlayers(numOfGames:number){
     });
     setListPNames([...listPNames]);
     setCountListPNames([...countListPNames]);
+  }
+
+  function resetRest(){
+    alert(countListPNames.length)
+    for(let i=0;i < countListPNames.length; i++){
+      alert("happens")
+      const name = countListPNames[i];
+      name.count = 0;
+    }
+    setCountListPNames([...countListPNames]); // this updates the state thus shows the result of the change back from 3^ to 0
   }
 
   return (
@@ -273,6 +282,7 @@ function nineMorePlayers(numOfGames:number){
           <li><button>Remove</button>  {countListPNames.name} | Rest:{countListPNames.count} <button> + </button></li>
         ))}
       </ol>
+      <button type = "button" onClick={resetRest}>Reset Rest</button>
      <table>
         <tr key={"header"}>
           {Object.keys(gameSets[0]).map((key) => (
