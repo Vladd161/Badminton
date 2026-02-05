@@ -2,10 +2,10 @@ import { useState } from 'react'
 
 // "Japheth", "Ludwig", "Syafa", "Lessie", "Vlademir", "Arfa", "Gian", "Robert", "Chris", "Emman"
 function App() {
-  const [playerCount, setPlayerCount] = useState(11)
+  const [playerCount, setPlayerCount] = useState(0)
   const [hours, setHours] = useState(3)
   const [court, setCourt] = useState(2)
-  const [playerNames, setPlayerNames] = useState('asd, Japheth, Ludwig, Syafa, Lessie, Vlademir, Arfa, Robert, Chris, Justin, Eman');
+  const [playerNames, setPlayerNames] = useState('');
   const [listPNames, setListPNames] = useState<string[]>([]) // set  of names
   const [countListPNames, setCountListPNames] = useState<any[]>([]); // list of {name:,count:} object  
   const [gameSets, setGameSets] = useState<any[]>([{game: "", court1: [], court2: [], court3: [], rest:[]}]) 
@@ -117,7 +117,6 @@ function nineMorePlayers(numOfGames:number){
       // While there remain elements to shuffle...
       for(let i = 0; i < numOfGames; i++){
         let shuffleNames = listPNames.slice(0) ; // 
-        alert(shuffleNames);
         let restList = getLeastRest(); // returns an array of those that needs rest
         for(let i=0;i <restList.length;i++){
           let index = shuffleNames.findIndex(function(name){return name == restList[i]})// proper way to do findIndex is tohave function and return .. weird
@@ -229,7 +228,6 @@ function nineMorePlayers(numOfGames:number){
   }
 
   function resetRest(){
-    alert(countListPNames.length)
     for(let i=0;i < countListPNames.length; i++){
       const name = countListPNames[i];
       name.count = 0;
@@ -240,7 +238,7 @@ function nineMorePlayers(numOfGames:number){
   function removePlayer(playerName:string){
     const countNameIndex = countListPNames.findIndex((e) => e.name == playerName);
     countListPNames.splice(countNameIndex,1)
-    const nameIndex = countListPNames.findIndex((e) => e.name == playerName);
+    const nameIndex = listPNames.findIndex((e) => e == playerName);
     listPNames.splice(nameIndex,1)
     setCountListPNames([...countListPNames]) // this updates the state thus shows the result of the change removing it from the list
     setListPNames([...listPNames]);
@@ -297,9 +295,6 @@ function nineMorePlayers(numOfGames:number){
     <button type="button" onClick={addNames}>Add Names</button>
     <br></br>
     <button type="button" onClick={startGame}>Start Game</button>
-    {playerCount}
-    {hours}
-    {court} 
       <ol>
         {countListPNames.map(countListPNames => (
           <li><button type = "button" onClick = {() => removePlayer(countListPNames.name)}>Remove</button>
