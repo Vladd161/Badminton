@@ -117,6 +117,7 @@ function nineMorePlayers(numOfGames:number){
       // While there remain elements to shuffle...
       for(let i = 0; i < numOfGames; i++){
         let shuffleNames = listPNames.slice(0) ; // 
+        alert(shuffleNames);
         let restList = getLeastRest(); // returns an array of those that needs rest
         for(let i=0;i <restList.length;i++){
           let index = shuffleNames.findIndex(function(name){return name == restList[i]})// proper way to do findIndex is tohave function and return .. weird
@@ -160,7 +161,7 @@ function nineMorePlayers(numOfGames:number){
           [shuffleNames[currentIndex], shuffleNames[randomIndex]] = [
             shuffleNames[randomIndex], shuffleNames[currentIndex]];
         }
-        gameSets.push({key: gameNo, court1: shuffleNames.slice(0,2), court2: shuffleNames.slice(2), court3:[], rest:[]});
+        gameSets.push({game: gameNo, court1: shuffleNames.slice(0,2), court2: shuffleNames.slice(2), court3:[], rest:[]});
         gameNo+=1;
       }
       setGameSets([...gameSets])
