@@ -8,7 +8,7 @@ function App() {
   const [playerNames, setPlayerNames] = useState('');
   const [listPNames, setListPNames] = useState<string[]>([]) // set  of names
   const [countListPNames, setCountListPNames] = useState<any[]>([]); // list of {name:,count:} object  
-  const [gameSets, setGameSets] = useState<any[]>([{game: "", court1: [], court2: [], court3: [], rest:[]}]) 
+  const [gameSets, setGameSets] = useState<any[]>([]) 
 
 
   // function convertPlayerNames(names: string){
@@ -23,7 +23,6 @@ function App() {
     let numOfGames = (hours * 60)/15;
     if(gameSets.length > 1){
       gameSets.splice(0)
-      gameSets.push({game: "", court1: [], court2: [], court3: [], rest:[]})
     }
      // removes elements starting from 0(everything)| Do not know how to setGameSets to clear out the useState.
     //all possible games for 8 people == 24 8!/8!-4!+
@@ -298,7 +297,7 @@ function nineMorePlayers(numOfGames:number){
       <ol>
         {countListPNames.map(countListPNames => (
           <li><button type = "button" onClick = {() => removePlayer(countListPNames.name)}>Remove</button>
-          {countListPNames.name} | Rest:{countListPNames.count}                
+          {countListPNames.name}   |Rest:{countListPNames.count}                
           <button type = "button" onClick = {() => restPlus(countListPNames.name)}> + </button> 
           <button type = "button" onClick = {() => restMinus(countListPNames.name)}> - </button>
           </li> // in button removePlayer have to add () => for it to be a function that accepts parameter 
@@ -306,20 +305,37 @@ function nineMorePlayers(numOfGames:number){
       </ol>
       <button type = "button" onClick={resetRest}>Reset Rest</button>
      <table>
-        <tr key={"header"}>
-          {Object.keys(gameSets[0]).map((key) => (
+         {gameSets.map((item) => (
+          <>
+              <th>{item.game}
+                <tr>Court 1</tr>
+                <tr style={{ whiteSpace: 'pre-wrap' , fontWeight: 'normal'}}>{'\n'}{item.court1.join('\n ')}</tr> 
+                <tr>Court 2</tr>
+                <tr style={{ whiteSpace: 'pre-wrap' , fontWeight: 'normal' }}>{'\n'} {item.court2.join('\n ')}</tr> 
+                <tr>Court 3</tr>
+                <tr style={{ whiteSpace: 'pre-wrap' , fontWeight: 'normal' }}>{'\n'}{item.court3.join('\n ')}</tr> 
+                <tr>Rest</tr>
+                <tr style={{ whiteSpace: 'pre-wrap' , fontWeight: 'normal' }}>{'\n'}{item.rest.join('\n ')}</tr> 
+              </th>
+              
+    
+         </>
+         ))} 
+        {/* <tr key={"header"}>
+          {gameSets.map((key) => (
             <th>{key}</th>
           ))}
-        </tr>
-        {gameSets.map((item) => (
-          <tr key={item}>
-            <td>{item.game}</td>
-            <td>{item.court1.join(', ')}</td>
-            <td>{item.court2.join(', ')}</td>
-            <td>{item.court3.join(', ')}</td>
-            <td>{item.rest.join(', ')}</td>
+        </tr> */}
+        {/* {gameSets.map((item) => (
+          <>
+          <tr>
+            <td>{item.court1.join('\n')}</td>
           </tr>
-        ))}
+          <tr>
+            <td>{item.court2.join('\n')}</td>
+          </tr>
+          </>
+        ))} */}
       </table>
 
     </>
