@@ -1,4 +1,115 @@
 import { useState } from 'react'
+import styled from 'styled-components'
+import {createGlobalStyle} from 'styled-components';
+
+const GlobalStyle = createGlobalStyle`
+  body{
+  font-family: "DM Sans", sans-serif;
+  }
+`
+
+const Button = styled.button`
+  display: block;
+  margin:0 auto;
+`
+
+const PlayerNameInputLabel = styled.label`
+  display: block;
+  text-align:center;
+  gap: 8px;
+`
+const LabelInput = styled.input`
+
+`
+const LabelButton = styled.button` 
+  margin:0 auto;
+  display:block;
+`
+const LabelSpan = styled.span`
+  text-align: center;
+  display:block;
+`
+
+//field-sizing: content makes it so that the size is dependent on the input typed inside 
+const Input = styled.input` 
+  field-sizing: content;
+  margin:0 auto;
+`
+
+//display block + text-align center = centers the whole label + input inside;
+const Label = styled.label`
+  display: block;
+  text-align:center;
+  gap: 8px;
+`
+
+// to center things display + margin combo under for example
+const Logo = styled.img`
+  height:140px;
+  display: block;
+  margin:0 auto;
+`
+const GamesImg = styled.img`
+  height:35px;
+  display: block;
+  margin:0 auto;
+`
+
+
+const OrderedList = styled.ol`
+  margin: 0 auto;
+  display:table;
+  padding-inline-start: 0px;
+  list-style-type: decimal;
+`
+
+const List = styled.li`
+ 
+`
+
+const PlayerRemoveButton = styled.button`
+   
+`
+const PlayerAddButton = styled.button`
+  
+`
+const PlayerMinusButton = styled.button`
+   
+  
+`
+const ListSpan = styled.span`
+   margin-left: 10px;
+`
+
+const NameSpan = styled.span`
+   
+`
+
+const Rest = styled.div`
+  float: right;
+`
+
+const Table = styled.table`
+  overflow: auto;
+  width: 100%;
+  max-width: 400px;
+  height: 400px;
+  display: block;
+  margin: 0 auto;
+  border-spacing: 0;
+`
+const Th = styled.th`
+  border: 1px solid black;
+  padding: 5px 10px;
+`
+const Tr = styled.tr`
+  padding: 5px 10px;
+`
+
+const TrHeader = styled.tr`
+  padding: 5px 10px;
+  border-bottom: 111px solid red;
+`
 
 // "Japheth", "Ludwig", "Syafa", "Lessie", "Vlademir", "Arfa", "Gian", "Robert", "Chris", "Emman"
 function App() {
@@ -9,6 +120,7 @@ function App() {
   const [listPNames, setListPNames] = useState<string[]>([]) // set  of names
   const [countListPNames, setCountListPNames] = useState<any[]>([]); // list of {name:,count:} object  
   const [gameSets, setGameSets] = useState<any[]>([]) 
+
 
 
   // function convertPlayerNames(names: string){
@@ -50,6 +162,12 @@ function getLeastRest(){
   let min = 999
   let leastRest: string[] = [] // List of names that has the least amount of rest or havent rested yet to choose from
   let restList: string[] = [] // List of Names that are resting to be returned
+  let maxPlayers = 0;
+  if(playerCount > 9){
+    maxPlayers = 8
+  }else if(playerCount == 7){
+    maxPlayers = 6
+  }
   countListPNames.forEach((e) => {
     if(e.count < min){ //sets the minimum 0,1,2,3 
       min = e.count;
@@ -71,7 +189,7 @@ function getLeastRest(){
         leastRest[randomIndex], leastRest[currentIndex]];
   }
 
-  if(playerCount % 8 > leastRest.length){
+  if(playerCount % maxPlayers > leastRest.length){
     min = 999;
 
     for(let i=0; i < leastRest.length;  i++){
@@ -95,7 +213,7 @@ function getLeastRest(){
       leastRest.splice(index,1);
     }
     let initialRest = restList.length
-    for(let i=0; i < ((playerCount % 8) - initialRest);  i++){
+    for(let i=0; i < ((playerCount % maxPlayers) - initialRest);  i++){
       let randomIndex = Math.floor(Math.random() * leastRest.length);
       restList.push(leastRest[randomIndex])
       const name = countListPNames.find((e) => e.name == leastRest[randomIndex]);
@@ -103,7 +221,7 @@ function getLeastRest(){
     }
   }
   else{ 
-    for(let i=0; i < playerCount % 8;  i++){
+    for(let i=0; i < playerCount % maxPlayers;  i++){
       restList.push(leastRest[i]); 
       const name = countListPNames.find((e) => e.name == leastRest[i]);
       name.count += 1;
@@ -117,7 +235,7 @@ function nineMorePlayers(numOfGames:number){
       for(let i = 0; i < numOfGames; i++){
         let shuffleNames = listPNames.slice(0) ; // 
         let restList = getLeastRest(); // returns an array of those that needs rest
-        for(let i=0;i <restList.length;i++){
+        for(let i=0;i <restList.length;i++){ // removes the players in the restList
           let index = shuffleNames.findIndex(function(name){return name == restList[i]})// proper way to do findIndex is tohave function and return .. weird
           shuffleNames.splice(index,1);
         }
@@ -133,9 +251,9 @@ function nineMorePlayers(numOfGames:number){
             shuffleNames[randomIndex], shuffleNames[currentIndex]];
         }
         if(court == 2){
-          gameSets.push({game: gameNo, court1: shuffleNames.slice(0,4), court2: shuffleNames.slice(4,8), court3: [], rest: restList});
+          gameSets.push({game: gameNo, court1: shuffleNames.slice(0,4).sort(), court2: shuffleNames.slice(4,8).sort(), court3: [], rest: restList});
         }else{
-          gameSets.push({game: gameNo, court1: shuffleNames.slice(0,4), court2: shuffleNames.slice(4,8), court3: shuffleNames.slice(8), rest: restList});
+          gameSets.push({game: gameNo, court1: shuffleNames.slice(0,4).sort(), court2: shuffleNames.slice(4,8).sort(), court3: shuffleNames.slice(8).sort(), rest: restList});
         }
         
         gameNo+=1;
@@ -159,7 +277,7 @@ function nineMorePlayers(numOfGames:number){
           [shuffleNames[currentIndex], shuffleNames[randomIndex]] = [
             shuffleNames[randomIndex], shuffleNames[currentIndex]];
         }
-        gameSets.push({game: gameNo, court1: shuffleNames.slice(0,2), court2: shuffleNames.slice(2), court3:[], rest:[]});
+        gameSets.push({game: gameNo, court1: (shuffleNames.slice(0,2)).sort(), court2: shuffleNames.slice(2), court3:[], rest:[]});
         gameNo+=1;
       }
       setGameSets([...gameSets])
@@ -170,10 +288,12 @@ function nineMorePlayers(numOfGames:number){
       // While there remain elements to shuffle...
       for(let i = 0; i < numOfGames; i++){
         let shuffleNames = listPNames.slice(0) ; // 
-        let currentIndex = shuffleNames.length - 2;
-        let endIndex = shuffleNames.length - 1;
-          [shuffleNames[endIndex], shuffleNames[i%7]] = [
-            shuffleNames[i%7], shuffleNames[endIndex]];
+        let restList = getLeastRest(); // returns an array of those that needs rest
+        for(let i=0;i <restList.length;i++){ // removes the players in the restList
+          let index = shuffleNames.findIndex(function(name){return name == restList[i]})// proper way to do findIndex is tohave function and return .. weird
+          shuffleNames.splice(index,1);
+        }
+        let currentIndex = shuffleNames.length - 1;
         while (currentIndex != 0) {
 
           // Pick a remaining element...
@@ -184,7 +304,7 @@ function nineMorePlayers(numOfGames:number){
           [shuffleNames[currentIndex], shuffleNames[randomIndex]] = [
             shuffleNames[randomIndex], shuffleNames[currentIndex]];
         }
-        gameSets.push({game: gameNo, court1: shuffleNames.slice(0,2), court2: shuffleNames.slice(2,6), court3: [], rest: shuffleNames.slice(6)});
+        gameSets.push({game: gameNo, court1: shuffleNames.slice(0,2), court2: shuffleNames.slice(2,6), court3: [], rest: restList});
         gameNo+=1;
       }
       setGameSets([...gameSets])
@@ -259,68 +379,81 @@ function nineMorePlayers(numOfGames:number){
   }
   return (
     <>
-    <label>
-      How many players? {'    '}
-    <input
+    <GlobalStyle/>
+    <Logo src={"./IMG_2183.png"}/>
+    <Label>
+      players {'    '}
+    <Input
       type = "number" // have to code teh type of the value 
       value = {playerCount}
       onChange={(e) => setPlayerCount(e.target.valueAsNumber)} // this takes the value as number if its just e.target.value then it counts it as a string 
     />
-    </label>
-    <label>
-      How many hours? {'    '}
-    <input
+    </Label>
+    <Label>
+      hours {'    '}
+    <Input
       type = "number"
       value = {hours}
       onChange={(e) => setHours(e.target.valueAsNumber)} // this takes the value as number if its just e.target.value then it counts it as a string 
     />
-    </label>
-    <label>
-      How many courts? {'    '}
-    <input
+    </Label>
+    <Label>
+      courts {'    '}
+    <Input
       type = "number"
       value = {court}
       onChange={(e) => setCourt(e.target.valueAsNumber)} // this takes the value as number if its just e.target.value then it counts it as a string 
     />
-    </label>
-    <br></br><br></br>
-    <label>
-      Player Names {'    '}
-    <input
-      value = {playerNames}
-      onChange={(e) => setPlayerNames(e.target.value)} // this takes the value as number if its just e.target.value then it counts it as a string 
-    />
-    </label>
-    <button type="button" onClick={addNames}>Add Names</button>
+    </Label>
     <br></br>
-    <button type="button" onClick={startGame}>Start Game</button>
-      <ol>
-        {countListPNames.map(countListPNames => (
-          <li><button type = "button" onClick = {() => removePlayer(countListPNames.name)}>Remove</button>
-          {countListPNames.name}   |Rest:{countListPNames.count}                
-          <button type = "button" onClick = {() => restPlus(countListPNames.name)}> + </button> 
-          <button type = "button" onClick = {() => restMinus(countListPNames.name)}> - </button>
-          </li> // in button removePlayer have to add () => for it to be a function that accepts parameter 
-        ))}
-      </ol>
-      <button type = "button" onClick={resetRest}>Reset Rest</button>
-     <table>
-         {gameSets.map((item) => (
-          <>
-              <th>{item.game}
-                <tr>Court 1</tr>
-                <tr style={{ whiteSpace: 'pre-wrap' , fontWeight: 'normal'}}>{'\n'}{item.court1.join('\n ')}</tr> 
-                <tr>Court 2</tr>
-                <tr style={{ whiteSpace: 'pre-wrap' , fontWeight: 'normal' }}>{'\n'} {item.court2.join('\n ')}</tr> 
-                <tr>Court 3</tr>
-                <tr style={{ whiteSpace: 'pre-wrap' , fontWeight: 'normal' }}>{'\n'}{item.court3.join('\n ')}</tr> 
-                <tr>Rest</tr>
-                <tr style={{ whiteSpace: 'pre-wrap' , fontWeight: 'normal' }}>{'\n'}{item.rest.join('\n ')}</tr> 
-              </th>
+    <PlayerNameInputLabel>
+        <LabelSpan>Player Names {'    '}</LabelSpan>
+      <LabelInput
+        value = {playerNames}
+        onChange={(e) => setPlayerNames(e.target.value)} // this takes the value as number if its just e.target.value then it counts it as a string 
+      />
+      <LabelButton type="button" onClick={addNames}>submit</LabelButton>
+    </PlayerNameInputLabel>
+    
+    <br></br>
+    <Button type="button" onClick={startGame}>Start Game</Button>
+    <OrderedList>
+      {countListPNames.map(countListPNames => (
+        <>
+        
+        <List>
+          <PlayerRemoveButton type = "button" onClick = {() => removePlayer(countListPNames.name)}>-</PlayerRemoveButton>
+          <NameSpan>{countListPNames.name}</NameSpan>
+          <Rest>
+          <ListSpan>Rest:{countListPNames.count}</ListSpan>                
+          <PlayerAddButton type = "button" onClick = {() => restPlus(countListPNames.name)}> + </PlayerAddButton> 
+          <PlayerMinusButton type = "button" onClick = {() => restMinus(countListPNames.name)}> - </PlayerMinusButton> 
+          </Rest>
+        </List> 
+
+        </>
+        // in button removePlayer have to add () => for it to be a function that accepts parameter 
+      ))}
+    </OrderedList>
+    <button type = "button" onClick={resetRest}>Reset Rest</button>
+    <GamesImg src={"./IMG_games.png"}/>
+    <Table>
+        {gameSets.map((item) => (
+         <>
+             <Th>{item.game}
+               <TrHeader>Court 1</TrHeader>
+               <Tr style={{fontWeight: 'normal'}}>{'\n'}{item.court1.sort().join('\n ')}</Tr> 
+               <TrHeader>Court 2</TrHeader>
+               <Tr style={{fontWeight: 'normal' }}>{'\n'}{item.court2.sort().join('\n ')}</Tr> 
+               <TrHeader>Court 3</TrHeader>
+               <Tr style={{fontWeight: 'normal' }}>{'\n'}{item.court3.sort().join('\n ')}</Tr> 
+               <TrHeader>Rest</TrHeader>
+               <Tr style={{fontWeight: 'normal' }}>{'\n'}{item.rest.sort().join('\n ')}</Tr> 
+             </Th>
               
     
-         </>
-         ))} 
+        </>
+        ))} 
         {/* <tr key={"header"}>
           {gameSets.map((key) => (
             <th>{key}</th>
@@ -336,7 +469,7 @@ function nineMorePlayers(numOfGames:number){
           </tr>
           </>
         ))} */}
-      </table>
+      </Table>
 
     </>
   );
