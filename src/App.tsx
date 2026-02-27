@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 import {createGlobalStyle} from 'styled-components';
+import logoImg from '../../my-app/src/assets/logo.jpg';
+import gamesImg from '../../my-app/src/assets/games.jpg';
 
 const GlobalStyle = createGlobalStyle`
   body{
@@ -380,7 +382,7 @@ function nineMorePlayers(numOfGames:number){
   return (
     <>
     <GlobalStyle/>
-    <Logo src={"/Badminton/src/assets/logo.jpg"} alt = "badminton"/>
+    <Logo src={logoImg} alt = "badminton"/>
     <Label>
       players {'    '}
     <Input
@@ -436,7 +438,7 @@ function nineMorePlayers(numOfGames:number){
       ))}
     </OrderedList>
     <Button type = "button" onClick={resetRest}>Reset Rest</Button>
-    <GamesImg src={"/Badminton/src/assets/games.jpg"} alt = "games"/>
+    <GamesImg src={gamesImg} alt = "games"/>
     <Table>
         {gameSets.map((item) => (
          <>
