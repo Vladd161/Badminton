@@ -93,7 +93,7 @@ const Table = styled.table`
   overflow: auto;
   width: 100%;
   max-width: 400px;
-  height: 400px;
+  height: 300px;
   display: block;
   margin: 0 auto;
   border-spacing: 0;
@@ -163,7 +163,7 @@ function getLeastRest(){
   let leastRest: string[] = [] // List of names that has the least amount of rest or havent rested yet to choose from
   let restList: string[] = [] // List of Names that are resting to be returned
   let maxPlayers = 0;
-  if(playerCount > 9){
+  if(playerCount >= 9){
     maxPlayers = 8
   }else if(playerCount == 7){
     maxPlayers = 6
@@ -435,7 +435,7 @@ function nineMorePlayers(numOfGames:number){
         // in button removePlayer have to add () => for it to be a function that accepts parameter 
       ))}
     </OrderedList>
-    <button type = "button" onClick={resetRest}>Reset Rest</button>
+    <Button type = "button" onClick={resetRest}>Reset Rest</Button>
     <GamesImg src={"./IMG_games.png"}/>
     <Table>
         {gameSets.map((item) => (
