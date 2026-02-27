@@ -380,7 +380,7 @@ function nineMorePlayers(numOfGames:number){
   return (
     <>
     <GlobalStyle/>
-    <Logo src={"./IMG_2183.png"}/>
+    <Logo src={"./logo"}/>
     <Label>
       players {'    '}
     <Input
@@ -436,7 +436,7 @@ function nineMorePlayers(numOfGames:number){
       ))}
     </OrderedList>
     <Button type = "button" onClick={resetRest}>Reset Rest</Button>
-    <GamesImg src={"./IMG_games.png"}/>
+    <GamesImg src={".games.png"}/>
     <Table>
         {gameSets.map((item) => (
          <>
