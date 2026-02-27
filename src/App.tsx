@@ -380,7 +380,7 @@ function nineMorePlayers(numOfGames:number){
   return (
     <>
     <GlobalStyle/>
-    <Logo src={"./src/assets/logo.jpg"}/>
+    <Logo src={"/Badminton/src/assets/logo.jpg"} alt = "badminton"/>
     <Label>
       players {'    '}
     <Input
@@ -436,7 +436,7 @@ function nineMorePlayers(numOfGames:number){
       ))}
     </OrderedList>
     <Button type = "button" onClick={resetRest}>Reset Rest</Button>
-    <GamesImg src={"./src/assets/games.jpg"}/>
+    <GamesImg src={"/Badminton/src/assets/games.jpg"} alt = "games"/>
     <Table>
         {gameSets.map((item) => (
          <>
