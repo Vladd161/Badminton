@@ -141,6 +141,11 @@ function App() {
 
 
   function startGame(){
+    for(let i=0;i < countListPNames.length; i++){
+      const name = countListPNames[i];
+      name.playedSingles = 0;
+    }
+    setCountListPNames([...countListPNames]); // this updates the state thus shows the result of the change back from 3^ to 0
     let numOfGames = (hours * 60)/15;
     if(gameSets.length > 1){
       gameSets.splice(0)
@@ -217,7 +222,7 @@ function getLeastRest(){
       leastRest.push(e.name)
     }
   })
-    for(let i=0;i <restList.length;i++){
+    for(let i=0;i <restList.length;i++){ //remove those that are in restList 
       let index = leastRest.findIndex(function(name){return name == restList[i]})// proper way to do findIndex is tohave function and return 
       leastRest.splice(index,1);
     }
@@ -253,6 +258,17 @@ function getSinglePlayers(nameList: string[]){
       leastPlayedSingle.push(e.name)
     }
   })
+
+  if(gameSets.length > 1){
+    let playedBefore = gameSets[gameSets.length - 1].court1;
+    for(let i=0;i <playedBefore.length;i++){ //remove those that are in restList 
+      if(leastPlayedSingle.some(e => e === playedBefore[i])){
+        let index = leastPlayedSingle.findIndex(function(name){return name == playedBefore[i]})// proper way to do findIndex is to have function and return 
+        leastPlayedSingle.splice(index,1);
+      }
+    }
+  }
+  alert(leastPlayedSingle)
   let currentIndex = leastPlayedSingle.length;
     while (currentIndex != 0) {
       // Pick a remaining element...
@@ -276,6 +292,16 @@ function getSinglePlayers(nameList: string[]){
       alreadyPlayedSingle.push(e.name)
     }
     })
+
+  if(gameSets.length > 1){
+    let playedBefore = gameSets[gameSets.length - 1].court1;
+    for(let i=0;i <playedBefore.length;i++){ //remove those that are in restList 
+      if(alreadyPlayedSingle.some(e => e === playedBefore[i])){
+        let index = alreadyPlayedSingle.findIndex(function(name){return name == playedBefore[i]})// proper way to do findIndex is to have function and return 
+        alreadyPlayedSingle.splice(index,1);
+      }
+    }
+  }
 
     //Add the least player to the list to be returned
     singlePlayers.push(leastPlayedSingle[0]);
@@ -487,6 +513,7 @@ function sixPlayers(numOfGames:number){
         <List>
           <PlayerRemoveButton type = "button" onClick = {() => removePlayer(countListPNames.name)}>-</PlayerRemoveButton>
           <NameSpan>{countListPNames.name}</NameSpan>
+          <NameSpan>{countListPNames.playedSingles}</NameSpan>
           <Rest>
           <ListSpan>Rest:{countListPNames.count} </ListSpan>                
           <PlayerAddButton type = "button" onClick = {() => restPlus(countListPNames.name)}> + </PlayerAddButton> 
