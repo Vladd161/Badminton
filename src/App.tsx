@@ -10,9 +10,17 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-const Button = styled.button`
+const StartButton = styled.button`
   display: block;
   margin:0 auto;
+  margin-bottom: 5px;
+  
+`
+const ResetButton = styled.button`
+  display: block;
+  margin:0 auto;
+  margin-bottom: 5px;
+  margin-top:5px;
 `
 
 const PlayerNameInputLabel = styled.label`
@@ -73,7 +81,6 @@ const PlayerRemoveButton = styled.button`
    
 `
 const PlayerAddButton = styled.button`
-  
 `
 const PlayerMinusButton = styled.button`
    
@@ -211,7 +218,7 @@ function getLeastRest(){
     }
   })
     for(let i=0;i <restList.length;i++){
-      let index = leastRest.findIndex(function(name){return name == restList[i]})// proper way to do findIndex is tohave function and return .. weird
+      let index = leastRest.findIndex(function(name){return name == restList[i]})// proper way to do findIndex is tohave function and return 
       leastRest.splice(index,1);
     }
     let initialRest = restList.length
@@ -231,6 +238,66 @@ function getLeastRest(){
   }
   return restList;
 }
+
+function getSinglePlayers(nameList: string[]){
+  let min = 999
+  let leastPlayedSingle: string[] = [] // List of names that has the least amount of rest or havent rested yet to choose from
+  let singlePlayers: string[] = [] // List of Names that are resting to be returned
+  countListPNames.forEach((e) => {
+    if(e.playedSingles < min){ //sets the minimum 0,1,2,3 
+      min = e.playedSingles;
+    }
+  })
+  countListPNames.forEach((e) => { //pushes all with least rest to a list to shuffle 
+    if(e.playedSingles == min && nameList.some(f => f === e.name)){
+      leastPlayedSingle.push(e.name)
+    }
+  })
+  let currentIndex = leastPlayedSingle.length;
+    while (currentIndex != 0) {
+      // Pick a remaining element...
+      let randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      // And swap it with the current element.
+      [leastPlayedSingle[currentIndex], leastPlayedSingle[randomIndex]] = [
+        leastPlayedSingle[randomIndex], leastPlayedSingle[currentIndex]];
+  }
+  if(leastPlayedSingle.length < 2){
+    min = 999;
+    let alreadyPlayedSingle: string[] = []
+    countListPNames.forEach((e) => {
+    if(e.playedSingles < min){ //sets the minimum 0,1,2,3 
+      min = e.playedSingles;
+    }
+    })
+    countListPNames.forEach((e) => { //pushes all with least rest to a list to shuffle 
+    if(e.playedSingles == min + 1){
+      alreadyPlayedSingle.push(e.name)
+    }
+    })
+
+    //Add the least player to the list to be returned
+    singlePlayers.push(leastPlayedSingle[0]);
+    let nameToAdd = countListPNames.find((e) => e.name == leastPlayedSingle[0])
+    nameToAdd.playedSingles += 1;
+
+    //One Random person of the leastPlayedSingle that has played more than the leastest
+    let randomIndex = Math.floor(Math.random() * alreadyPlayedSingle.length);
+    singlePlayers.push(alreadyPlayedSingle[randomIndex])
+    let name = countListPNames.find((e) => e.name == alreadyPlayedSingle[randomIndex]);
+    name.playedSingles += 1;
+    
+  }
+  else{
+    for(let i=0; i <= playerCount % 6;  i++){
+      singlePlayers.push(leastPlayedSingle[i]); 
+      const name = countListPNames.find((e) => e.name == leastPlayedSingle[i]);
+      name.playedSingles += 1;
+    }
+  }
+  return singlePlayers;
+}
 function nineMorePlayers(numOfGames:number){
       let gameNo = 1;
       // While there remain elements to shuffle...
@@ -241,7 +308,7 @@ function nineMorePlayers(numOfGames:number){
           let index = shuffleNames.findIndex(function(name){return name == restList[i]})// proper way to do findIndex is tohave function and return .. weird
           shuffleNames.splice(index,1);
         }
-        let currentIndex = shuffleNames.length - 1;
+        let currentIndex = shuffleNames.length;
         while (currentIndex != 0) {
 
           // Pick a remaining element...
@@ -263,7 +330,7 @@ function nineMorePlayers(numOfGames:number){
       setGameSets([...gameSets])
     
   }
-  function sixPlayers(numOfGames:number){
+function sixPlayers(numOfGames:number){
       let gameNo = 1;
       // While there remain elements to shuffle...
       for(let i = 0; i < numOfGames; i++){
@@ -295,18 +362,12 @@ function nineMorePlayers(numOfGames:number){
           let index = shuffleNames.findIndex(function(name){return name == restList[i]})// proper way to do findIndex is tohave function and return .. weird
           shuffleNames.splice(index,1);
         }
-        let currentIndex = shuffleNames.length - 1;
-        while (currentIndex != 0) {
-
-          // Pick a remaining element...
-          let randomIndex = Math.floor(Math.random() * currentIndex);
-          currentIndex--;
-
-          // And swap it with the current element.
-          [shuffleNames[currentIndex], shuffleNames[randomIndex]] = [
-            shuffleNames[randomIndex], shuffleNames[currentIndex]];
+        let singlePlayers = getSinglePlayers(shuffleNames);
+        for(let i=0;i <singlePlayers.length;i++){ // removes the players in the restList
+          let index = shuffleNames.findIndex(function(name){return name == singlePlayers[i]})// proper way to do findIndex is tohave function and return .. weird
+          shuffleNames.splice(index,1);
         }
-        gameSets.push({game: gameNo, court1: shuffleNames.slice(0,2), court2: shuffleNames.slice(2,6), court3: [], rest: restList});
+        gameSets.push({game: gameNo, court1: singlePlayers, court2: shuffleNames, court3: [], rest: restList});
         gameNo+=1;
       }
       setGameSets([...gameSets])
@@ -341,7 +402,7 @@ function nineMorePlayers(numOfGames:number){
     newStateArray.forEach((e) => {
       if(!listPNames.includes(e.trim()) && e !== "" && e.trim().match(regex)){ // e.match(regex) check e if its a string only (names)
         listPNames.push(e.trim());
-        countListPNames.push({name: e.trim(), count:0})
+        countListPNames.push({name: e.trim(), count:0, playedSingles:0}) //initializer for every person submitted
       }
     });
     setListPNames([...listPNames]);
@@ -409,7 +470,7 @@ function nineMorePlayers(numOfGames:number){
     </Label>
     <br></br>
     <PlayerNameInputLabel>
-        <LabelSpan>Player Names {'    '}</LabelSpan>
+        <LabelSpan>player names {'    '}</LabelSpan>
       <LabelInput
         value = {playerNames}
         onChange={(e) => setPlayerNames(e.target.value)} // this takes the value as number if its just e.target.value then it counts it as a string 
@@ -418,7 +479,7 @@ function nineMorePlayers(numOfGames:number){
     </PlayerNameInputLabel>
     
     <br></br>
-    <Button type="button" onClick={startGame}>Start Game</Button>
+    <StartButton type="button" onClick={startGame}>start game</StartButton>
     <OrderedList>
       {countListPNames.map(countListPNames => (
         <>
@@ -426,8 +487,9 @@ function nineMorePlayers(numOfGames:number){
         <List>
           <PlayerRemoveButton type = "button" onClick = {() => removePlayer(countListPNames.name)}>-</PlayerRemoveButton>
           <NameSpan>{countListPNames.name}</NameSpan>
+          <NameSpan>{countListPNames.playedSingles}</NameSpan>
           <Rest>
-          <ListSpan>Rest:{countListPNames.count}</ListSpan>                
+          <ListSpan>Rest:{countListPNames.count} </ListSpan>                
           <PlayerAddButton type = "button" onClick = {() => restPlus(countListPNames.name)}> + </PlayerAddButton> 
           <PlayerMinusButton type = "button" onClick = {() => restMinus(countListPNames.name)}> - </PlayerMinusButton> 
           </Rest>
@@ -437,7 +499,7 @@ function nineMorePlayers(numOfGames:number){
         // in button removePlayer have to add () => for it to be a function that accepts parameter 
       ))}
     </OrderedList>
-    <Button type = "button" onClick={resetRest}>Reset Rest</Button>
+    <ResetButton type = "button" onClick={resetRest}>reset rest</ResetButton>
     <GamesImg src={gamesImg} alt = "games"/>
     <Table>
         {gameSets.map((item) => (
