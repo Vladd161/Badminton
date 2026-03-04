@@ -487,7 +487,6 @@ function sixPlayers(numOfGames:number){
         <List>
           <PlayerRemoveButton type = "button" onClick = {() => removePlayer(countListPNames.name)}>-</PlayerRemoveButton>
           <NameSpan>{countListPNames.name}</NameSpan>
-          <NameSpan>{countListPNames.playedSingles}</NameSpan>
           <Rest>
           <ListSpan>Rest:{countListPNames.count} </ListSpan>                
           <PlayerAddButton type = "button" onClick = {() => restPlus(countListPNames.name)}> + </PlayerAddButton> 
