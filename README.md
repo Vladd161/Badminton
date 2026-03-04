@@ -1,3 +1,14 @@
+Badmintom Team Manager
+
+Me and My group of friends that I played badminton with use chatgpt as a team manager but it has unfair amount of rest per person e.g. if someone comes late and the game already started that matchmaking needs to be re-prompted and people that have rested already needs to rests again creating unfairness so I made this for our group of friends for a better algorithm and a way to adjust the number of rest the person had such that they won't rest immediately again. 
+
+Only Viable for groups of people playing 2 courts and more than 6 people. 
+
+Type the player names with commas e.g (John, EJ, Walter, etc.)
+
+
+
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
