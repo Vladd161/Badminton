@@ -268,7 +268,6 @@ function getSinglePlayers(nameList: string[]){
       }
     }
   }
-  alert(leastPlayedSingle)
   let currentIndex = leastPlayedSingle.length;
     while (currentIndex != 0) {
       // Pick a remaining element...
