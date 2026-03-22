@@ -6,6 +6,9 @@ Only Viable for groups of people playing 2 courts and more than 6 people.
 
 Type the player names with commas e.g (John, EJ, Walter, etc.)
 
+Hosted by Github Pages:
+https://vladd161.github.io/Badminton/
+
 
 
 
